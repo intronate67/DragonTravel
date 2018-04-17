@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+    }
+}
+
+plugins {
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'java'
+
+group 'net.huntersharpe'
+version '1.0-SNAPSHOT'
+description 'Plugin that allows travel on Dragons'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://hub.spigotmc.org/nexus/content/groups/public/" }
+}
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+}
+
+dependencies {
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'org.spongepowered:spongeapi:7.0.0'
+    implementation 'co.aikar:acf-sponge:0.5.0-SNAPSHOT'
+}
+shadowJar {
+    relocate 'co.aikar.commands', 'net.huntersharpe.DragonTravel.acf'
+}
+build.dependsOn shadowJar
